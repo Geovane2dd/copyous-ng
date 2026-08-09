@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Copyous\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-09 13:46+0000\n"
+"POT-Creation-Date: 2026-08-09 13:01-0300\n"
 "PO-Revision-Date: 2025-12-01 18:02-0300\n"
 "Last-Translator: Murilo Leal <murilormleal@outlook.com>\n"
 "Language-Team: Portuguese (Brazil)\n"
@@ -81,7 +81,7 @@ msgstr "Desativar aviso"
 
 #: src/lib/database/entryTracker.ts:164
 msgid "Failed to load JSON"
-msgstr ""
+msgstr "Falha ao carregar JSON"
 
 #: src/lib/misc/notifications.ts:63 src/lib/misc/notifications.ts:114
 msgid "Copied Text"
@@ -1059,7 +1059,7 @@ msgstr "Selecione o tema preferido"
 
 #: src/lib/preferences/customization/themeCustomization.ts:75
 msgid "Yaru"
-msgstr ""
+msgstr "Yaru"
 
 #: src/lib/preferences/customization/themeCustomization.ts:89
 #: src/lib/preferences/customization/themeCustomization.ts:96
@@ -1069,7 +1069,7 @@ msgstr "Esquema de Cor"
 #: src/lib/preferences/customization/themeCustomization.ts:90
 #: src/lib/preferences/customization/themeCustomization.ts:97
 msgid "Set the color scheme of the theme"
-msgstr ""
+msgstr "Define o esquema de cores do tema"
 
 #: src/lib/preferences/customization/themeCustomization.ts:91
 #: src/lib/preferences/customization/themeCustomization.ts:98
@@ -1078,7 +1078,7 @@ msgstr "Escuro"
 
 #: src/lib/preferences/customization/themeCustomization.ts:91
 msgid "High Contrast"
-msgstr ""
+msgstr "Alto Contraste"
 
 #: src/lib/preferences/customization/themeCustomization.ts:91
 #: src/lib/preferences/customization/themeCustomization.ts:98
@@ -1408,23 +1408,24 @@ msgstr "Feedback"
 
 #: src/lib/preferences/general/feedbackSettings.ts:227
 msgid "Indicator Display"
-msgstr ""
+msgstr "Exibição do Indicador"
 
 #: src/lib/preferences/general/feedbackSettings.ts:228
 msgid "Choose how the clipboard indicator appears in the top panel"
 msgstr ""
+"Escolha como o indicador da área de transferência aparece no painel superior"
 
 #: src/lib/preferences/general/feedbackSettings.ts:231
 msgid "Icon Only"
-msgstr ""
+msgstr "Somente Ícone"
 
 #: src/lib/preferences/general/feedbackSettings.ts:232
 msgid "Clipboard Content Only"
-msgstr ""
+msgstr "Somente Conteúdo da Área de Transferência"
 
 #: src/lib/preferences/general/feedbackSettings.ts:233
 msgid "Icon and Clipboard Content"
-msgstr ""
+msgstr "Ícone e Conteúdo da Área de Transferência"
 
 #: src/lib/preferences/general/feedbackSettings.ts:239
 msgid "Wiggle Indicator"
@@ -1453,27 +1454,29 @@ msgstr "Histórico"
 
 #: src/lib/preferences/general/historySettings.ts:70
 msgid "Memory"
-msgstr ""
+msgstr "Memória"
 
 #: src/lib/preferences/general/historySettings.ts:71
 msgid "(recommended)"
-msgstr ""
+msgstr "(recomendado)"
 
 #: src/lib/preferences/general/historySettings.ts:71
 msgid "SQLite"
-msgstr ""
+msgstr "SQLite"
 
 #: src/lib/preferences/general/historySettings.ts:72
 msgid "JSON"
-msgstr ""
+msgstr "JSON"
 
 #: src/lib/preferences/general/historySettings.ts:99
 msgid "Database"
-msgstr ""
+msgstr "Banco de Dados"
 
 #: src/lib/preferences/general/historySettings.ts:100
 msgid "Select which database type to use for storing your clipboard"
 msgstr ""
+"Selecione qual tipo de banco de dados usar para armazenar sua área de "
+"transferência"
 
 #: src/lib/preferences/general/historySettings.ts:125
 msgid "Database Location"
@@ -1551,15 +1554,15 @@ msgstr "Alternar Modo Incógnito"
 
 #: src/lib/preferences/shortcuts/dialogShortcuts.ts:27
 msgid "Open Clipboard Dialog Behavior"
-msgstr ""
+msgstr "Comportamento ao Abrir a Caixa de Diálogo da Área de Transferência"
 
 #: src/lib/preferences/shortcuts/dialogShortcuts.ts:28
 msgid "Open / Select Next Item"
-msgstr ""
+msgstr "Abrir / Selecionar Próximo Item"
 
 #: src/lib/preferences/shortcuts/dialogShortcuts.ts:28
 msgid "Toggle Dialog"
-msgstr ""
+msgstr "Alternar Caixa de Diálogo"
 
 #: src/lib/preferences/shortcuts/itemShortcuts.ts:20
 #: src/lib/preferences/shortcuts/itemShortcuts.ts:39
@@ -1585,7 +1588,7 @@ msgstr "Apenas suportado para itens de texto e código"
 
 #: src/lib/preferences/shortcuts/itemShortcuts.ts:31
 msgid "Edit Title"
-msgstr ""
+msgstr "Editar Título"
 
 #: src/lib/preferences/shortcuts/itemShortcuts.ts:34
 msgid "Open Menu"
@@ -1597,15 +1600,15 @@ msgstr "Ação do clique do meio"
 
 #: src/lib/preferences/shortcuts/itemShortcuts.ts:67
 msgid "Swap Copy Shortcut"
-msgstr ""
+msgstr "Trocar Atalho de Copiar"
 
 #: src/lib/preferences/shortcuts/itemShortcuts.ts:68
 msgid "Swap copy and paste shortcuts"
-msgstr ""
+msgstr "Troca os atalhos de copiar e colar"
 
 #: src/lib/preferences/shortcuts/itemShortcuts.ts:72
 msgid "Paste Item"
-msgstr ""
+msgstr "Colar Item"
 
 #: src/lib/preferences/shortcuts/itemShortcuts.ts:74
 msgid "Copy Item"
@@ -1711,17 +1714,17 @@ msgstr "Desativar Atalho"
 msgid "Disabled"
 msgstr "Desabilitado"
 
-#: src/lib/ui/clipboardDialog.ts:269
+#: src/lib/ui/clipboardDialog.ts:272
 msgid "Clipboard"
-msgstr ""
+msgstr "Histórico"
 
-#: src/lib/ui/clipboardDialog.ts:279
+#: src/lib/ui/clipboardDialog.ts:282
 msgid "Folders"
-msgstr ""
+msgstr "Pastas"
 
-#: src/lib/ui/clipboardDialog.ts:804
+#: src/lib/ui/clipboardDialog.ts:807
 msgid "New Note"
-msgstr ""
+msgstr "Nova Nota"
 
 #: src/lib/ui/components/contentInfo.ts:36
 #, javascript-format
@@ -1777,31 +1780,31 @@ msgstr "Fechar"
 
 #: src/lib/ui/foldersView.ts:104
 msgid "Rename"
-msgstr ""
+msgstr "Renomear"
 
 #: src/lib/ui/foldersView.ts:105
 msgid "Rename Folder"
-msgstr ""
+msgstr "Renomear Pasta"
 
 #: src/lib/ui/foldersView.ts:145
 msgid "No Folders Yet"
-msgstr ""
+msgstr "Nenhuma Pasta Ainda"
 
 #: src/lib/ui/foldersView.ts:155
 msgid "+ New Folder"
-msgstr ""
+msgstr "+ Nova Pasta"
 
 #: src/lib/ui/foldersView.ts:159 src/lib/ui/foldersView.ts:255
 msgid "New Folder"
-msgstr ""
+msgstr "Nova Pasta"
 
 #: src/lib/ui/foldersView.ts:211
 msgid "Move to Folder"
-msgstr ""
+msgstr "Mover para Pasta"
 
 #: src/lib/ui/foldersView.ts:253
 msgid "New Folder…"
-msgstr ""
+msgstr "Nova Pasta…"
 
 #: src/lib/ui/indicator.ts:39
 msgid "Clear Clipboard History?"
@@ -1928,6 +1931,9 @@ msgstr "Atalhos"
 
 #~ msgid "Failed to load database"
 #~ msgstr "Falha ao carregar banco de dados"
+
+#~ msgid "Groups"
+#~ msgstr "Pastas"
 
 #~ msgid "Paste on Copy"
 #~ msgstr "Colar ao Copiar"

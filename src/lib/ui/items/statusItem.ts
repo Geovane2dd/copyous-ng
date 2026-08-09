@@ -31,14 +31,12 @@ export class StatusItem extends St.BoxLayout {
 	private readonly _icon: St.Icon;
 	private readonly _text: St.Label;
 
-	constructor(private ext: CopyousExtension) {
+	constructor(ext: CopyousExtension) {
 		super(
 			boxLayoutProps({
 				style_class: 'clipboard-item status-item',
 				orientation: Clutter.Orientation.VERTICAL,
 				can_focus: false,
-				width: 300,
-				height: 200,
 				x_align: Clutter.ActorAlign.CENTER,
 				y_align: Clutter.ActorAlign.CENTER,
 				x_expand: true,
@@ -80,18 +78,9 @@ export class StatusItem extends St.BoxLayout {
 		});
 		this._text.clutter_text.line_wrap = true;
 		this._text.clutter_text.line_wrap_mode = Pango.WrapMode.WORD_CHAR;
+		// Without this it ellipsizes ("Área de Transferê…") instead of wrapping to a second line.
+		this._text.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
 		box.add_child(this._text);
-
-		// Bind properties
-		ext.settings.connectObject(
-			'changed::item-width',
-			this.updateSize.bind(this),
-			'changed::item-height',
-			this.updateSize.bind(this),
-			this,
-		);
-
-		this.updateSize();
 	}
 
 	get state(): State {
@@ -113,16 +102,5 @@ export class StatusItem extends St.BoxLayout {
 			this._icon.gicon = this._noResultsIcon;
 			this._text.text = _('No Items Found');
 		}
-	}
-
-	private updateSize() {
-		this.width = this.ext.settings.get_int('item-width');
-		this.height = this.ext.settings.get_int('item-height');
-	}
-
-	override destroy() {
-		this.ext.settings.disconnectObject(this);
-
-		super.destroy();
 	}
 }

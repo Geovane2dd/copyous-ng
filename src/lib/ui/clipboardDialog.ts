@@ -261,12 +261,15 @@ class DialogTabBar extends St.BoxLayout {
 	private readonly _foldersButton: St.Button;
 	private _active: boolean = false;
 
-	constructor() {
+	constructor(ext: CopyousExtension) {
 		super({ style_class: 'dialog-tab-bar', x_expand: true });
 
+		// The bare global _() shortcut silently fails to translate the exact strings "Clipboard"
+		// and "Folders" here (returns them untranslated, even with a correct, verified .mo entry
+		// for both) -- calling gettext directly on the extension instance instead works reliably.
 		this._historyButton = new St.Button({
 			style_class: 'dialog-tab-button',
-			label: _('Clipboard'),
+			label: ext.gettext('Clipboard'),
 			toggle_mode: true,
 			checked: true,
 			can_focus: true,
@@ -276,7 +279,7 @@ class DialogTabBar extends St.BoxLayout {
 
 		this._foldersButton = new St.Button({
 			style_class: 'dialog-tab-button',
-			label: _('Folders'),
+			label: ext.gettext('Folders'),
 			toggle_mode: true,
 			can_focus: true,
 			x_expand: true,
@@ -396,7 +399,7 @@ export class ClipboardDialog extends St.Widget {
 		});
 
 		// Tab bar (History / Folders)
-		this._tabBar = new DialogTabBar();
+		this._tabBar = new DialogTabBar(ext);
 		this._dialog.insert_child_above(this._tabBar, this._header);
 		this._tabBar.connect('tab-changed', (_, foldersActive: boolean) => this.setFoldersTab(foldersActive));
 

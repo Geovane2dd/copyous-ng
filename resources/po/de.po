@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Copyous\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-09 13:46+0000\n"
+"POT-Creation-Date: 2026-08-09 13:01-0300\n"
 "PO-Revision-Date: 2026-03-26 22:19+0100\n"
 "Last-Translator: Christian Lauinger <christian@lauinger-clan.de>\n"
 "Language-Team: \n"
@@ -1734,15 +1734,15 @@ msgstr "Tastenkürzel deaktivieren"
 msgid "Disabled"
 msgstr "Deaktiviert"
 
-#: src/lib/ui/clipboardDialog.ts:269
+#: src/lib/ui/clipboardDialog.ts:272
 msgid "Clipboard"
 msgstr ""
 
-#: src/lib/ui/clipboardDialog.ts:279
+#: src/lib/ui/clipboardDialog.ts:282
 msgid "Folders"
 msgstr ""
 
-#: src/lib/ui/clipboardDialog.ts:804
+#: src/lib/ui/clipboardDialog.ts:807
 msgid "New Note"
 msgstr ""
 
