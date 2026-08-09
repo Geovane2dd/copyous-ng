@@ -16,6 +16,11 @@ jobs:
     permissions:
       contents: write
 
+    env:
+      # secrets can't be referenced directly in an `if:` conditional, so mirror it into a
+      # regular env var first (see the "Publish Release" step below).
+      GNOME_USER: ${{ secrets.GNOME_USER }}
+
     steps:
       - uses: actions/checkout@v6
         with:
@@ -47,8 +52,7 @@ jobs:
       - name: Publish Release
         # Only meaningful once this repo has its own extensions.gnome.org account credentials
         # configured as secrets; skips cleanly (instead of failing the run) until then.
-        if: ${{ steps.version.outputs.prerelease == 'false' && github.repository == 'Geovane2dd/copyous-ng' && secrets.GNOME_USER != '' }}
+        if: ${{ steps.version.outputs.prerelease == 'false' && github.repository == 'Geovane2dd/copyous-ng' && env.GNOME_USER != '' }}
         run: gnome-extensions upload -u "$GNOME_USER" -p "$GNOME_PASSWORD" --accept-tos dist/${{ env.UUID }}.zip
         env:
-          GNOME_USER: ${{ secrets.GNOME_USER }}
           GNOME_PASSWORD: ${{ secrets.GNOME_PASSWORD }}
