@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Copyous\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-09 13:01-0300\n"
+"POT-Creation-Date: 2026-08-09 13:24-0300\n"
 "PO-Revision-Date: 2026-04-30 18:05+0200\n"
 "Last-Translator: Adam Lewicki <a.lewicki95@gmail.com>\n"
 "Language-Team: \n"
@@ -1875,11 +1875,11 @@ msgstr "Brak tytułu"
 msgid "No Description"
 msgstr "Brak opisu"
 
-#: src/lib/ui/items/statusItem.ts:76 src/lib/ui/items/statusItem.ts:111
+#: src/lib/ui/items/statusItem.ts:74 src/lib/ui/items/statusItem.ts:100
 msgid "Clipboard is Empty"
 msgstr "Schowek jest pusty"
 
-#: src/lib/ui/items/statusItem.ts:114
+#: src/lib/ui/items/statusItem.ts:103
 msgid "No Items Found"
 msgstr "Nie znaleziono elementów"
 
