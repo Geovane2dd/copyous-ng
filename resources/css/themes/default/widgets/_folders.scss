@@ -1,0 +1,112 @@
+// History / Folders tab bar
+.dialog-tab-bar {
+	padding: $base_padding * 1.5 $base_padding * 2.5 0 $base_padding * 2.5;
+	spacing: $base_padding;
+
+	.dialog-tab-button {
+		@extend %button;
+		border-radius: $base_border_radius * 1.5;
+		padding: $base_padding * 0.75 0;
+
+		&:checked {
+			@include button(normal, $c: -st-accent-color, $tc: -st-accent-fg-color, $style: default);
+			&:focus {
+				@include button(focus, $c: -st-accent-color, $tc: -st-accent-fg-color, $style: default);
+			}
+			&:hover {
+				@include button(hover, $c: -st-accent-color, $tc: -st-accent-fg-color, $style: default);
+			}
+		}
+	}
+}
+
+// Folders tab
+.folders-view {
+	padding: $base_padding * 2.5;
+	spacing: $base_padding * 1.5;
+
+	.folders-scrollview {
+		StBoxLayout {
+			spacing: $base_padding;
+		}
+	}
+
+	.folders-empty-label {
+		color: $insensitive_fg_color;
+		padding: $base_padding * 4 0;
+	}
+}
+
+.folder-row {
+	@extend %card;
+	border-radius: $base_border_radius * 2;
+	padding: $base_padding * 1.25 $base_padding * 1.5;
+
+	&:hover:active {
+		@include button(active, $style: card);
+	}
+
+	.folder-row-box {
+		spacing: $base_padding * 1.25;
+	}
+
+	.folder-row-icon {
+		icon-size: $scalable_icon_size;
+		-st-icon-style: symbolic;
+	}
+
+	.folder-row-label {
+		font-weight: bold;
+	}
+
+	.folder-row-menu-button {
+		@extend %button;
+		border-radius: $forced_circular_radius;
+		padding: $scaled_padding * 0.75;
+
+		StIcon {
+			icon-size: $scalable_icon_size * 0.8;
+			-st-icon-style: symbolic;
+		}
+	}
+
+	// New folder row: same card, dashed border, centered label instead of icon+label+menu
+	&.new-folder-row {
+		border: 1px dashed $outer_borders_color;
+		background-color: transparent;
+
+		&:hover {
+			background-color: $hover_bg_color;
+		}
+	}
+}
+
+// Back bar shown when browsing a specific folder's items
+.folder-back-bar {
+	padding: $base_padding * 1.5 $base_padding * 2.5 0 $base_padding * 2.5;
+	spacing: $base_padding * 1.25;
+
+	.folder-back-button {
+		@extend %button;
+		border-radius: $forced_circular_radius;
+		padding: $scaled_padding * 0.9;
+
+		StIcon {
+			icon-size: $scalable_icon_size * 0.9;
+			-st-icon-style: symbolic;
+		}
+	}
+
+	.folder-back-label {
+		font-weight: bold;
+	}
+}
+
+// Folder name prompt (create/rename)
+.folder-name-dialog {
+	width: 22em;
+
+	.folder-name-dialog-entry {
+		margin-top: $base_padding;
+	}
+}

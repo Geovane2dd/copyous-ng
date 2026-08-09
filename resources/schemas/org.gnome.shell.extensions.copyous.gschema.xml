@@ -138,6 +138,12 @@
 			<summary>Number of minutes to keep unpinned and untagged items in the clipboard history. Set to 0 to disable the time limit</summary>
 		</key>
 
+		<!-- Folders -->
+		<key name="folders" type="as">
+			<default>[]</default>
+			<summary>User-created folder names, in display order. Items reference a folder by name via their own "folder" column</summary>
+		</key>
+
 		<!-- Behavior -->
 		<key name="remember-search" type="b">
 			<default>false</default>

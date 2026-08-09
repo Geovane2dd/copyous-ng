@@ -11,6 +11,7 @@ import { ItemType, Tags } from '../../common/constants.js';
 import { registerClass } from '../../common/gjs.js';
 import { ClipboardEntry } from '../../database/database.js';
 import { Shortcut } from '../../misc/shortcuts.js';
+import { FolderSubMenuItem } from '../foldersView.js';
 import { ActionPopupMenuSection, ActionPopupMenuSectionSignals } from './actionMenu.js';
 import { EditDialog } from './editDialog.js';
 import { ShortcutLabel } from './shortcutLabel.js';
@@ -66,6 +67,7 @@ export class ClipboardItemMenu extends PopupMenu.PopupMenu<ActionPopupMenuSectio
 	private _entry: ClipboardEntry | null = null;
 
 	private readonly _tagsItem: TagsItem;
+	private readonly _folderItem: FolderSubMenuItem;
 	private readonly _editSection: PopupMenu.PopupMenuSection;
 	private readonly _actionMenuSection: ActionPopupMenuSection;
 
@@ -83,6 +85,16 @@ export class ClipboardItemMenu extends PopupMenu.PopupMenu<ActionPopupMenuSectio
 			if (this._entry) {
 				this._entry.tag = this._tagsItem.tag;
 			}
+		});
+
+		// Folder
+		this._folderItem = new FolderSubMenuItem(ext);
+		this.addMenuItem(this._folderItem);
+
+		this._folderItem.connect('activate-folder', (_item: unknown, folder: string) => {
+			if (this._entry) this._entry.folder = folder || null;
+			this._folderItem.folder = folder || null;
+			this.close(BoxPointer.PopupAnimation.FADE);
 		});
 
 		this.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
@@ -153,6 +165,7 @@ export class ClipboardItemMenu extends PopupMenu.PopupMenu<ActionPopupMenuSectio
 		this._actionMenuSection.entry = entry;
 
 		this._tagsItem.tag = entry.tag;
+		this._folderItem.folder = entry.folder;
 		this._editSection.actor.visible = canEdit(entry);
 	}
 

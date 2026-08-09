@@ -10,7 +10,7 @@ import { ItemType, getDataPath } from '../common/constants.js';
 import { ClipboardHistory } from '../common/settings.js';
 import { ClipboardEntry, Database, Metadata } from './database.js';
 
-const DATABASE_VERSION = 2;
+const DATABASE_VERSION = 3;
 
 interface SqlBuilder<T> extends Omit<Gda5.SqlBuilder, 'add_field_value_as_gvalue'> {
 	add_id<K extends Extract<keyof T, string>>(str: K): Gda5.SqlBuilderId;
@@ -335,6 +335,23 @@ export class GdaDatabase implements Database {
 					// Ignore
 				}
 			}
+			/* falls through */
+			case 2: {
+				try {
+					// Add folder column
+					const [addColumnStmt] = this._connection.parse_sql_string(
+						`ALTER TABLE 'clipboard' ADD COLUMN 'folder' text;`,
+					);
+					await async_statement_execute_non_select(
+						this._Gda,
+						this._connection,
+						addColumnStmt,
+						this._cancellable,
+					);
+				} catch {
+					// Ignore
+				}
+			}
 		}
 
 		// Update to current version
@@ -356,7 +373,7 @@ export class GdaDatabase implements Database {
 				return [];
 			}
 
-			// SELECT id FROM table (WHERE NOT (pinned == true OR tag IS NOT NULL))?
+			// SELECT id FROM table WHERE NOT (folder IS NOT NULL (OR pinned == true OR tag IS NOT NULL)?)
 			const [selectBuilder, where] = this.selectToDeleteBuilder(history === ClipboardHistory.KeepPinnedAndTagged);
 
 			const selectStmt = selectBuilder.get_statement();
@@ -413,6 +430,7 @@ export class GdaDatabase implements Database {
 			builder.select_add_field('content', null, null);
 			builder.select_add_field('pinned', null, null);
 			builder.select_add_field('tag', null, null);
+			builder.select_add_field('folder', null, null);
 			const datetimeId = builder.select_add_field('datetime', null, null);
 			builder.select_add_field('metadata', null, null);
 			builder.select_add_field('title', null, null);
@@ -434,6 +452,7 @@ export class GdaDatabase implements Database {
 				const content = unescapeContent(iter.get_value_for_field('content'));
 				const pinned = iter.get_value_for_field('pinned');
 				const tag = iter.get_value_for_field('tag');
+				const folder = iter.get_value_for_field('folder');
 				let datetime = iter.get_value_for_field('datetime');
 				const metadata = iter.get_value_for_field('metadata') as string | null;
 				const title = (iter.get_value_for_field('title') as string | null) ?? '';
@@ -463,7 +482,7 @@ export class GdaDatabase implements Database {
 					}
 				}
 
-				entries.push(new ClipboardEntry(id, type, content, pinned, tag, datetime, metadataObj, title));
+				entries.push(new ClipboardEntry(id, type, content, pinned, tag, datetime, metadataObj, title, folder));
 			}
 
 			return entries;
@@ -716,7 +735,7 @@ export class GdaDatabase implements Database {
 		includeWhere: boolean = true,
 		olderThanMinutes: number = 0,
 	): [SqlBuilder<ClipboardEntry>, Gda.SqlBuilderId | null] {
-		// SELECT id FROM table (WHERE NOT (pinned == true OR tag IS NOT NULL) (AND datetime < DATETIME('now', '-n minutes'))?)?
+		// SELECT id FROM table (WHERE NOT (pinned == true OR tag IS NOT NULL OR folder IS NOT NULL) (AND datetime < DATETIME('now', '-n minutes'))?)?
 		const builder = new this._Gda.SqlBuilder({
 			stmt_type: this._Gda.SqlStatementType.SELECT,
 		}) as SqlBuilder<ClipboardEntry>;
@@ -725,18 +744,23 @@ export class GdaDatabase implements Database {
 
 		let where = null;
 		if (includeWhere) {
-			// WHERE NOT (pinned == true OR tag IS NOT NULL)
+			// WHERE NOT (pinned == true OR tag IS NOT NULL OR folder IS NOT NULL)
 			where = builder.add_cond(
 				this._Gda.SqlOperatorType.NOT,
 				builder.add_cond(
 					this._Gda.SqlOperatorType.OR,
 					builder.add_cond(
-						this._Gda.SqlOperatorType.EQ,
-						builder.add_id('pinned'),
-						add_expr_value(builder, true),
+						this._Gda.SqlOperatorType.OR,
+						builder.add_cond(
+							this._Gda.SqlOperatorType.EQ,
+							builder.add_id('pinned'),
+							add_expr_value(builder, true),
+							0,
+						),
+						builder.add_cond(this._Gda.SqlOperatorType.ISNOTNULL, builder.add_id('tag'), 0, 0),
 						0,
 					),
-					builder.add_cond(this._Gda.SqlOperatorType.ISNOTNULL, builder.add_id('tag'), 0, 0),
+					builder.add_cond(this._Gda.SqlOperatorType.ISNOTNULL, builder.add_id('folder'), 0, 0),
 					0,
 				),
 				0,

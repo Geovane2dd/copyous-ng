@@ -54,6 +54,12 @@ export class SearchQuery extends GObject.Object {
 		readonly tag: Tag | null,
 		readonly excludeTagged: boolean,
 		readonly type: ItemType | null,
+		// Which folder to restrict results to. Unlike tag/type this isn't driven by the search
+		// entry's own UI -- it's set by the Folders tab (see ClipboardDialog) -- so it doesn't
+		// participate in the change-detection optimization below; changing it always forces a
+		// full re-filter (see withFolder()), which is fine since it only changes on an explicit
+		// tab/folder switch, not per keystroke.
+		readonly folder: string | null = null,
 	) {
 		super();
 	}
@@ -66,12 +72,21 @@ export class SearchQuery extends GObject.Object {
 		return (this.tag === null && !this.excludeTagged) || this.tag === tag;
 	}
 
+	public matchesFolder(folder: string | null): boolean {
+		// Unlike tag, folder membership is exclusive: an item that's in a folder is moved out of
+		// the plain History view (this.folder === null requires entry.folder === null too), and
+		// only shows up while browsing that specific folder.
+		return this.folder === folder;
+	}
+
 	public matchesType(type: ItemType): boolean {
 		return this.type === null || this.type === type;
 	}
 
-	public matchesProperties(pinned: boolean, tag: Tag | null, type: ItemType): boolean {
-		return this.matchesPinned(pinned) && this.matchesTag(tag) && this.matchesType(type);
+	public matchesProperties(pinned: boolean, tag: Tag | null, folder: string | null, type: ItemType): boolean {
+		return (
+			this.matchesPinned(pinned) && this.matchesTag(tag) && this.matchesFolder(folder) && this.matchesType(type)
+		);
 	}
 
 	public matchesQuery(...text: string[]): boolean {
@@ -86,7 +101,7 @@ export class SearchQuery extends GObject.Object {
 		if (this.change === SearchChange.LessStrict && state) return true;
 		if (this.change === SearchChange.MoreStrict && !state) return false;
 
-		if (!this.matchesProperties(entry.pinned, entry.tag, entry.type)) return false;
+		if (!this.matchesProperties(entry.pinned, entry.tag, entry.folder, entry.type)) return false;
 		if (this.matchesQuery(...text)) return true;
 		return entry.title ? this.matchesQuery(entry.title) : false;
 	}
@@ -100,6 +115,22 @@ export class SearchQuery extends GObject.Object {
 			this.tag,
 			this.excludeTagged,
 			this.type,
+			this.folder,
+		);
+	}
+
+	public withFolder(folder: string | null): SearchQuery {
+		if (this.folder === folder) return this;
+
+		return new SearchQuery(
+			SearchChange.Different,
+			this.query,
+			this.pinned,
+			this.excludePinned,
+			this.tag,
+			this.excludeTagged,
+			this.type,
+			folder,
 		);
 	}
 }

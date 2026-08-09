@@ -69,6 +69,7 @@ class TimeLabel extends St.Label {
 			HeaderControlsVisibility.Visible,
 		),
 		'tag': GObject.ParamSpec.string('tag', null, null, GObject.ParamFlags.READWRITE, ''),
+		'folder': GObject.ParamSpec.string('folder', null, null, GObject.ParamFlags.READWRITE, ''),
 		'active': flagsParamSpec('active', GObject.ParamFlags.READWRITE, ActiveState, ActiveState.None),
 		'custom-title': GObject.ParamSpec.string('custom-title', null, null, GObject.ParamFlags.READWRITE, ''),
 		'default-title': GObject.ParamSpec.string('default-title', null, null, GObject.ParamFlags.READWRITE, ''),
@@ -88,6 +89,7 @@ export class ClipboardItemHeader extends St.BoxLayout {
 	private _headerVisible: boolean = true;
 	private _controlsVisibility: HeaderControlsVisibility = HeaderControlsVisibility.Visible;
 	private _tag: Tag | null = null;
+	private _folder: string | null = null;
 	private _active: ActiveState = ActiveState.None;
 	private _customTitle: string = '';
 	private _defaultTitle: string = '';
@@ -321,6 +323,18 @@ export class ClipboardItemHeader extends St.BoxLayout {
 		this.updateHeaderControls();
 	}
 
+	get folder() {
+		return this._folder;
+	}
+
+	set folder(folder) {
+		if (this._folder === folder) return;
+
+		this._folder = folder;
+		this.notify('folder');
+		this.updateHeaderControls();
+	}
+
 	get active() {
 		return this._active;
 	}
@@ -443,7 +457,10 @@ export class ClipboardItemHeader extends St.BoxLayout {
 		}
 
 		let deleteVisible = true;
-		if (((this._protectPinned && this.pinned) || (this._protectTagged && this.tag)) && !this._forceDelete) {
+		if (
+			((this._protectPinned && this.pinned) || (this._protectTagged && (this.tag || this.folder))) &&
+			!this._forceDelete
+		) {
 			deleteVisible = false;
 		}
 

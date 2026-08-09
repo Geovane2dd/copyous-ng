@@ -230,7 +230,7 @@ export class ClipboardEntryTracker {
 		const olderThan = now.add_minutes(-M)!;
 
 		for (const entry of this._entries.values()) {
-			if (entry.pinned || entry.tag) continue;
+			if (entry.pinned || entry.tag || entry.folder) continue;
 			if (entry.datetime.compare(olderThan) < 0) return true;
 		}
 
@@ -261,6 +261,7 @@ export class ClipboardEntryTracker {
 			});
 			entry.connect('notify::pinned', () => this._database?.updateProperty(entry, 'pinned'));
 			entry.connect('notify::tag', () => this._database?.updateProperty(entry, 'tag'));
+			entry.connect('notify::folder', () => this._database?.updateProperty(entry, 'folder'));
 			entry.connect('notify::datetime', () => this._database?.updateProperty(entry, 'datetime'));
 			entry.connect('notify::metadata', () => this._database?.updateProperty(entry, 'metadata'));
 			entry.connect('notify::title', () => this._database?.updateProperty(entry, 'title'));
@@ -307,6 +308,56 @@ export class ClipboardEntryTracker {
 		if (entry) {
 			this._entries.delete(id);
 			entry.emit('delete');
+		}
+	}
+
+	/**
+	 * Folders (Ditto-style): the list of names lives in gsettings; each entry just stores the
+	 * name of the folder it belongs to (like `tag`, but free-form). See `folder` on
+	 * ClipboardEntry and the "folders" gsettings key.
+	 */
+	public get folders(): string[] {
+		return this.ext.settings.get_strv('folders');
+	}
+
+	public createFolder(name: string): boolean {
+		name = name.trim();
+		if (!name) return false;
+
+		const folders = this.folders;
+		if (folders.includes(name)) return false;
+
+		this.ext.settings.set_strv('folders', [...folders, name]);
+		return true;
+	}
+
+	public renameFolder(oldName: string, newName: string): boolean {
+		newName = newName.trim();
+		if (!newName || oldName === newName) return false;
+
+		const folders = this.folders;
+		if (!folders.includes(oldName) || folders.includes(newName)) return false;
+
+		this.ext.settings.set_strv(
+			'folders',
+			folders.map((f) => (f === oldName ? newName : f)),
+		);
+
+		for (const entry of this._entries.values()) {
+			if (entry.folder === oldName) entry.folder = newName;
+		}
+
+		return true;
+	}
+
+	public deleteFolder(name: string): void {
+		this.ext.settings.set_strv(
+			'folders',
+			this.folders.filter((f) => f !== name),
+		);
+
+		for (const entry of this._entries.values()) {
+			if (entry.folder === name) entry.folder = null;
 		}
 	}
 }

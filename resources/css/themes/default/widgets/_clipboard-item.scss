@@ -163,6 +163,12 @@
 
 			.status-item-title {
 				@extend %title_2;
+				// Force wrapping instead of overflowing past the dialog's edge -- ancestors don't
+				// always propagate a width constraint down to this label (e.g. in vertical
+				// orientation, where the dialog's own width is unconstrained/natural), and longer
+				// translations of "Clipboard is Empty" can be wider than the dialog itself.
+				width: 200px;
+				text-align: center;
 			}
 		}
 	}

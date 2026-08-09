@@ -6,7 +6,7 @@ import { ConsoleLike, Extension } from 'resource:///org/gnome/shell/extensions/e
 import type { HLJSApi } from 'highlight.js';
 import type { LanguageFn } from 'highlight.js';
 
-import { getDataPath, getHljsLanguages, getHljsPath } from './lib/common/constants.js';
+import { ItemType, getDataPath, getHljsLanguages, getHljsPath } from './lib/common/constants.js';
 import { DbusService } from './lib/common/dbus.js';
 import { ClipboardHistory, CopyousSettings, migrateSettings } from './lib/common/settings.js';
 import { SoundManager, tryCreateSoundManager } from './lib/common/sound.js';
@@ -260,6 +260,34 @@ export default class CopyousExtension extends Extension {
 
 		this.hljsCallbacks ??= [];
 		this.hljsCallbacks.push(fn);
+	}
+
+	public get folders(): string[] {
+		return this.entryTracker?.folders ?? [];
+	}
+
+	public createFolder(name: string): boolean {
+		return this.entryTracker?.createFolder(name) ?? false;
+	}
+
+	public renameFolder(oldName: string, newName: string): boolean {
+		return this.entryTracker?.renameFolder(oldName, newName) ?? false;
+	}
+
+	public deleteFolder(name: string): void {
+		this.entryTracker?.deleteFolder(name);
+	}
+
+	/**
+	 * Creates a standalone text note directly inside a folder, rather than one captured from the
+	 * clipboard. Used by the "+" button in the Folders tab.
+	 */
+	public async createNote(folder: string, content: string): Promise<ClipboardEntry | null> {
+		const entry = await this.entryTracker?.insert(ItemType.Text, content, null);
+		if (!entry) return null;
+
+		entry.folder = folder;
+		return entry;
 	}
 
 	private async initEntryTracker() {

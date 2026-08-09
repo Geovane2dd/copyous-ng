@@ -61,6 +61,7 @@ export interface LinkMetadata {
 		content: GObject.ParamSpec.string('content', null, null, GObject.ParamFlags.READWRITE, ''),
 		pinned: GObject.ParamSpec.boolean('pinned', null, null, GObject.ParamFlags.READWRITE, false),
 		tag: GObject.ParamSpec.string('tag', null, null, GObject.ParamFlags.READWRITE, ''),
+		folder: GObject.ParamSpec.string('folder', null, null, GObject.ParamFlags.READWRITE, ''),
 		datetime: GObject.ParamSpec.boxed('datetime', null, null, GObject.ParamFlags.READWRITE, GLib.DateTime),
 		metadata: GObject.ParamSpec.jsobject('metadata', null, null, GObject.ParamFlags.READWRITE),
 		title: GObject.ParamSpec.string('title', null, null, GObject.ParamFlags.READWRITE, ''),
@@ -75,6 +76,7 @@ export class ClipboardEntry extends GObject.Object {
 	declare content: string;
 	declare pinned: boolean;
 	declare tag: Tag | null;
+	declare folder: string | null;
 	declare datetime: GLib.DateTime;
 	declare metadata: Metadata | null;
 	declare title: string;
@@ -88,6 +90,7 @@ export class ClipboardEntry extends GObject.Object {
 		datetime: GLib.DateTime,
 		metadata: Metadata | null = null,
 		title: string = '',
+		folder: string | null = null,
 	) {
 		super();
 
@@ -99,6 +102,7 @@ export class ClipboardEntry extends GObject.Object {
 		this.datetime = datetime;
 		this.metadata = metadata;
 		this.title = title;
+		this.folder = folder;
 	}
 
 	get id() {

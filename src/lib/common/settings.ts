@@ -13,6 +13,8 @@ export const Settings = {
 	HistoryLength: 'history-length',
 	HistoryTime: 'history-time',
 
+	Folders: 'folders',
+
 	RememberSearch: 'remember-search',
 	ExcludePinned: 'exclude-pinned',
 	ExcludeTagged: 'exclude-tagged',
@@ -143,6 +145,8 @@ export const SettingsTypes = {
 	[Settings.ClipboardHistory]: 'enum',
 	[Settings.HistoryLength]: 'int',
 	[Settings.HistoryTime]: 'int',
+
+	[Settings.Folders]: 'strv',
 
 	[Settings.RememberSearch]: 'boolean',
 	[Settings.ExcludePinned]: 'boolean',

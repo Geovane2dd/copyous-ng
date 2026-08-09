@@ -88,6 +88,7 @@ export class ClipboardItem extends St.Button {
 		);
 		entry.bind_property('datetime', this._header, 'datetime', GObject.BindingFlags.SYNC_CREATE);
 		entry.bind_property('tag', this._header, 'tag', GObject.BindingFlags.SYNC_CREATE);
+		entry.bind_property('folder', this._header, 'folder', GObject.BindingFlags.SYNC_CREATE);
 		entry.bind_property(
 			'title',
 			this._header,
@@ -191,7 +192,10 @@ export class ClipboardItem extends St.Button {
 	}
 
 	private delete() {
-		if (!(this._protectPinned && this.entry.pinned) && !(this._protectTagged && this.entry.tag)) {
+		if (
+			!(this._protectPinned && this.entry.pinned) &&
+			!(this._protectTagged && (this.entry.tag || this.entry.folder))
+		) {
 			this.entry.emit('delete');
 		}
 	}

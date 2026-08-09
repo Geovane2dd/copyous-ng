@@ -1,6 +1,7 @@
 import Clutter from 'gi://Clutter';
 import GObject from 'gi://GObject';
 import Gio from 'gi://Gio';
+import Pango from 'gi://Pango';
 import St from 'gi://St';
 
 import { gettext as _ } from 'resource:///org/gnome/shell/extensions/extension.js';
@@ -78,6 +79,7 @@ export class StatusItem extends St.BoxLayout {
 			y_expand: true,
 		});
 		this._text.clutter_text.line_wrap = true;
+		this._text.clutter_text.line_wrap_mode = Pango.WrapMode.WORD_CHAR;
 		box.add_child(this._text);
 
 		// Bind properties

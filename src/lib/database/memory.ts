@@ -28,7 +28,7 @@ export class MemoryDatabase implements Database {
 			case ClipboardHistory.KeepPinnedAndTagged:
 				deleted = [];
 				for (const [key, entry] of this._entries) {
-					if (!(entry.pinned || entry.tag)) {
+					if (!(entry.pinned || entry.tag || entry.folder)) {
 						this._entries.delete(key);
 						this._keys.delete(entry.id);
 						deleted.push(entry.id);
@@ -110,7 +110,7 @@ export class MemoryDatabase implements Database {
 
 	public async deleteOldest(offset: number, olderThanMinutes: number): Promise<number[]> {
 		const entries = await this.entries();
-		const unprotected = entries.filter((e) => !(e.pinned || e.tag));
+		const unprotected = entries.filter((e) => !(e.pinned || e.tag || e.folder));
 		const deleted = unprotected.slice(offset).map((e) => e.id);
 
 		if (olderThanMinutes > 0) {

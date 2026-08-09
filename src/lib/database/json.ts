@@ -11,13 +11,14 @@ import { MemoryDatabase } from './memory.js';
 Gio._promisify(Gio.File.prototype, 'load_contents_async');
 Gio._promisify(Gio.File.prototype, 'replace_contents_async');
 
-const DATABASE_VERSION = 2;
+const DATABASE_VERSION = 3;
 
 interface JsonClipboardEntry {
 	type: string;
 	content: string;
 	pinned: boolean;
 	tag: string | null;
+	folder: string | null;
 	datetime: string;
 	metadata: Metadata | null;
 	title: string | undefined;
@@ -61,6 +62,7 @@ export class JsonDatabase extends MemoryDatabase {
 				GLib.DateTime.new_from_iso8601(entry.datetime, GLib.TimeZone.new_utc()),
 				entry.metadata,
 				entry.title,
+				entry.folder ?? null,
 			);
 
 			const key = this.entryToKey(clipboardEntry);
@@ -131,6 +133,7 @@ export class JsonDatabase extends MemoryDatabase {
 						content: entry.content,
 						pinned: entry.pinned,
 						tag: entry.tag,
+						folder: entry.folder,
 						datetime: entry.datetime.to_utc()!.format_iso8601()!,
 						metadata: entry.metadata,
 						title: entry.title || undefined,

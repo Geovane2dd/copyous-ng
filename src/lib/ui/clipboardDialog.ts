@@ -1,4 +1,5 @@
 import Clutter from 'gi://Clutter';
+import GLib from 'gi://GLib';
 import GObject from 'gi://GObject';
 import Gio from 'gi://Gio';
 import Graphene from 'gi://Graphene';
@@ -23,6 +24,7 @@ import { ClipboardEntry } from '../database/database.js';
 import { VERSION, disableUnredirect, enableUnredirect } from '../misc/compatibility.js';
 import { ClipboardScrollView } from './clipboardScrollView.js';
 import { ClipboardItemMenu } from './components/clipboardItemMenu.js';
+import { FoldersView } from './foldersView.js';
 import { ConfirmClearHistoryDialog } from './indicator.js';
 import { CharacterItem } from './items/characterItem.js';
 import { CodeItem } from './items/codeItem.js';
@@ -243,6 +245,65 @@ class ClipboardDialogFooter extends St.BoxLayout {
 	}
 }
 
+/**
+ * History/Folders tab bar, shown as its own row above the item list -- works identically
+ * regardless of the dialog's horizontal/vertical orientation.
+ */
+@registerClass({
+	Signals: {
+		'tab-changed': {
+			param_types: [GObject.TYPE_BOOLEAN],
+		},
+	},
+})
+class DialogTabBar extends St.BoxLayout {
+	private readonly _historyButton: St.Button;
+	private readonly _foldersButton: St.Button;
+	private _active: boolean = false;
+
+	constructor() {
+		super({ style_class: 'dialog-tab-bar', x_expand: true });
+
+		this._historyButton = new St.Button({
+			style_class: 'dialog-tab-button',
+			label: _('Clipboard'),
+			toggle_mode: true,
+			checked: true,
+			can_focus: true,
+			x_expand: true,
+		});
+		this.add_child(this._historyButton);
+
+		this._foldersButton = new St.Button({
+			style_class: 'dialog-tab-button',
+			label: _('Folders'),
+			toggle_mode: true,
+			can_focus: true,
+			x_expand: true,
+		});
+		this.add_child(this._foldersButton);
+
+		this._historyButton.connect('clicked', () => this.setActive(false));
+		this._foldersButton.connect('clicked', () => this.setActive(true));
+	}
+
+	private setActive(foldersActive: boolean) {
+		// Compare against our own tracked state, not the buttons' own `checked` -- toggle_mode
+		// buttons flip their own `checked` on click *before* this handler runs, so reading it
+		// back here would always say "already active" and skip un-checking the other button.
+		if (this._active === foldersActive) return;
+		this._active = foldersActive;
+
+		this._historyButton.checked = !foldersActive;
+		this._foldersButton.checked = foldersActive;
+		this.emit('tab-changed', foldersActive);
+	}
+
+	set foldersActive(active: boolean) {
+		this.setActive(active);
+	}
+}
+
 @registerClass({
 	Properties: {
 		opened: GObject.ParamSpec.boolean('opened', null, null, GObject.ParamFlags.READABLE, false),
@@ -271,9 +332,17 @@ export class ClipboardDialog extends St.Widget {
 
 	private readonly _dialog: St.BoxLayout;
 	private readonly _header: ClipboardDialogHeader;
+	private readonly _tabBar: DialogTabBar;
 	private readonly _scrollView: ClipboardScrollView;
 	private readonly _footer: ClipboardDialogFooter;
 	private readonly _clipboardItemMenu: ClipboardItemMenu;
+
+	private readonly _foldersView: FoldersView;
+	private readonly _folderBackBar: St.BoxLayout;
+	private readonly _folderBackLabel: St.Label;
+	private readonly _newNoteButton: St.Button;
+	private _foldersTabActive: boolean = false;
+	private _currentFolder: string | null = null;
 
 	constructor(private ext: CopyousExtension) {
 		super({
@@ -315,7 +384,7 @@ export class ClipboardDialog extends St.Widget {
 
 		this._header.connect('open-settings', this.openSettings.bind(this));
 		this._header.connect('clear-history', this.confirmClearHistory.bind(this));
-		this._header.searchEntry.connect('search', (_, query: SearchQuery) => this._scrollView.search(query));
+		this._header.searchEntry.connect('search', (_, query: SearchQuery) => this.updateSearch(query));
 		this._header.searchEntry.connect('activate', () => this._scrollView.activateFirst());
 
 		this._header.connect('notify::header-visible', () => {
@@ -325,6 +394,11 @@ export class ClipboardDialog extends St.Widget {
 				this._dialog.remove_style_class_name('show-header');
 			}
 		});
+
+		// Tab bar (History / Folders)
+		this._tabBar = new DialogTabBar();
+		this._dialog.insert_child_above(this._tabBar, this._header);
+		this._tabBar.connect('tab-changed', (_, foldersActive: boolean) => this.setFoldersTab(foldersActive));
 
 		// Scrollbox
 		this._scrollView = new ClipboardScrollView(ext);
@@ -336,6 +410,39 @@ export class ClipboardDialog extends St.Widget {
 			enabled: false,
 		});
 		this._header.add_constraint(this._widthConstraint);
+
+		// Folder back bar (shown when browsing a specific folder's items)
+		this._folderBackBar = new St.BoxLayout({ style_class: 'folder-back-bar', visible: false, x_expand: true });
+		this._dialog.insert_child_below(this._folderBackBar, this._scrollView);
+
+		const backButton = new St.Button({
+			style_class: 'folder-back-button',
+			can_focus: true,
+			child: new St.Icon({ gicon: loadIcon(ext, Icon.Left) }),
+		});
+		backButton.connect('clicked', () => this.showFolderList());
+		this._folderBackBar.add_child(backButton);
+
+		this._folderBackLabel = new St.Label({
+			style_class: 'folder-back-label',
+			y_align: Clutter.ActorAlign.CENTER,
+			x_expand: true,
+		});
+		this._folderBackBar.add_child(this._folderBackLabel);
+
+		this._newNoteButton = new St.Button({
+			style_class: 'folder-back-button',
+			can_focus: true,
+			child: new St.Icon({ gicon: loadIcon(ext, Icon.Add) }),
+		});
+		this._newNoteButton.connect('clicked', () => this.createNote());
+		this._folderBackBar.add_child(this._newNoteButton);
+
+		// Folders tab
+		this._foldersView = new FoldersView(ext);
+		this._foldersView.visible = false;
+		this._dialog.insert_child_below(this._foldersView, this._folderBackBar);
+		this._foldersView.connect('folder-selected', (_, name: string) => this.openFolder(name));
 
 		// Footer
 		this._footer = new ClipboardDialogFooter(ext);
@@ -397,7 +504,7 @@ export class ClipboardDialog extends St.Widget {
 		this.updateMargins();
 
 		// Update initial search for when exclude-pinned or exclude-tagged is enabled
-		this._scrollView.search(this._header.searchEntry.searchQuery);
+		this.updateSearch(this._header.searchEntry.searchQuery);
 	}
 
 	override destroy() {
@@ -655,6 +762,52 @@ export class ClipboardDialog extends St.Widget {
 		dialog.open();
 	}
 
+	private setFoldersTab(active: boolean) {
+		this._foldersTabActive = active;
+		this._tabBar.foldersActive = active;
+
+		if (active) {
+			this.showFolderList();
+		} else {
+			this._currentFolder = null;
+			this._foldersView.visible = false;
+			this._folderBackBar.visible = false;
+			this._scrollView.visible = true;
+			this.updateSearch(this._header.searchEntry.searchQuery);
+		}
+	}
+
+	private showFolderList() {
+		this._currentFolder = null;
+		this._foldersView.visible = true;
+		this._folderBackBar.visible = false;
+		this._scrollView.visible = false;
+	}
+
+	private openFolder(name: string) {
+		this._currentFolder = name;
+		this._foldersView.visible = false;
+		this._folderBackLabel.text = name;
+		this._folderBackBar.visible = true;
+		this._scrollView.visible = true;
+		this.updateSearch(this._header.searchEntry.searchQuery);
+	}
+
+	private updateSearch(query: SearchQuery) {
+		this._scrollView.search(query.withFolder(this._currentFolder));
+	}
+
+	private async createNote() {
+		if (!this._currentFolder) return;
+
+		const timestamp = GLib.DateTime.new_now_local().format('%c') ?? `${Date.now()}`;
+		const entry = await this.ext.createNote(this._currentFolder, `${_('New Note')} ${timestamp}`);
+		if (!entry) return;
+
+		this.addEntry(entry);
+		this._clipboardItemMenu.edit(entry);
+	}
+
 	private updatePosition() {
 		const showAtPointer = this.ext.settings.get_boolean('show-at-pointer');
 		this._orientation = this.ext.settings.get_enum('clipboard-orientation');
@@ -836,6 +989,9 @@ export class ClipboardDialog extends St.Widget {
 
 	override vfunc_map(): void {
 		super.vfunc_map();
+
+		// Always reopen on the History tab
+		if (this._foldersTabActive) this.setFoldersTab(false);
 
 		// Update fit constraint
 		this.updateFitConstraint();
