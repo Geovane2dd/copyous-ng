@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Copyous\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-08 13:32+0000\n"
+"POT-Creation-Date: 2026-08-09 13:46+0000\n"
 "PO-Revision-Date: 2025-11-30 20:29+0700\n"
 "Last-Translator: Victor <firephantom303@gmail.com>\n"
 "Language-Team: Russian\n"
@@ -129,7 +129,7 @@ msgstr "Скопирован цвет"
 #: src/lib/preferences/general/feedbackSettings.ts:308
 #: src/lib/preferences/shortcuts/itemShortcuts.ts:39
 #: src/lib/ui/components/editDialog.ts:217
-#: src/lib/ui/components/editDialog.ts:244
+#: src/lib/ui/components/editDialog.ts:244 src/lib/ui/foldersView.ts:234
 msgid "None"
 msgstr "Нет"
 
@@ -219,7 +219,8 @@ msgstr "Выберите, какие типы разрешены"
 #: src/lib/preferences/dependencies/dependencies.ts:225
 #: src/lib/preferences/general/appExclusionSettings.ts:171
 #: src/lib/preferences/shortcuts/shortcutRow.ts:136
-#: src/lib/ui/components/editDialog.ts:306 src/lib/ui/indicator.ts:48
+#: src/lib/ui/components/editDialog.ts:306 src/lib/ui/foldersView.ts:46
+#: src/lib/ui/indicator.ts:48
 msgid "Cancel"
 msgstr "Отмена"
 
@@ -350,7 +351,7 @@ msgid "Edit Action"
 msgstr "Изменить действие"
 
 #: src/lib/preferences/actions/actionDialog.ts:662
-#: src/lib/ui/components/editDialog.ts:313
+#: src/lib/ui/components/editDialog.ts:313 src/lib/ui/foldersView.ts:53
 msgid "Save"
 msgstr "Сохранить"
 
@@ -362,7 +363,7 @@ msgstr "Добавить подменю"
 #: src/lib/preferences/actions/actionSubMenuDialog.ts:80
 #: src/lib/preferences/actions/actionsGroup.ts:126
 #: src/lib/preferences/actions/actionsGroup.ts:424
-#: src/lib/ui/components/clipboardItemMenu.ts:94
+#: src/lib/ui/components/clipboardItemMenu.ts:106
 msgid "Edit"
 msgstr "Изменить"
 
@@ -373,6 +374,7 @@ msgstr "Изменить подменю"
 #: src/lib/preferences/actions/actionsGroup.ts:35
 #: src/lib/preferences/actions/actionsGroup.ts:127
 #: src/lib/preferences/actions/actionsGroup.ts:425
+#: src/lib/ui/foldersView.ts:110
 msgid "Delete"
 msgstr "Удалить"
 
@@ -1483,7 +1485,7 @@ msgstr ""
 "системы или её завершении"
 
 #: src/lib/preferences/general/historySettings.ts:137
-#: src/lib/ui/clipboardDialog.ts:131 src/lib/ui/clipboardDialog.ts:236
+#: src/lib/ui/clipboardDialog.ts:133 src/lib/ui/clipboardDialog.ts:238
 #: src/lib/ui/indicator.ts:55
 msgid "Clear"
 msgstr "Очистить"
@@ -1702,6 +1704,18 @@ msgstr "Отключить сочетание клавиш"
 msgid "Disabled"
 msgstr "Отключено"
 
+#: src/lib/ui/clipboardDialog.ts:269
+msgid "Clipboard"
+msgstr ""
+
+#: src/lib/ui/clipboardDialog.ts:279
+msgid "Folders"
+msgstr ""
+
+#: src/lib/ui/clipboardDialog.ts:804
+msgid "New Note"
+msgstr ""
+
 #: src/lib/ui/components/contentInfo.ts:36
 #, javascript-format
 msgid "%dh"
@@ -1756,6 +1770,34 @@ msgstr "Редактировать элемент буфера обмена"
 #: src/lib/ui/components/qrCodeDialog.ts:146
 msgid "Close"
 msgstr "Закрыть"
+
+#: src/lib/ui/foldersView.ts:104
+msgid "Rename"
+msgstr ""
+
+#: src/lib/ui/foldersView.ts:105
+msgid "Rename Folder"
+msgstr ""
+
+#: src/lib/ui/foldersView.ts:145
+msgid "No Folders Yet"
+msgstr ""
+
+#: src/lib/ui/foldersView.ts:155
+msgid "+ New Folder"
+msgstr ""
+
+#: src/lib/ui/foldersView.ts:159 src/lib/ui/foldersView.ts:255
+msgid "New Folder"
+msgstr ""
+
+#: src/lib/ui/foldersView.ts:211
+msgid "Move to Folder"
+msgstr ""
+
+#: src/lib/ui/foldersView.ts:253
+msgid "New Folder…"
+msgstr ""
 
 #: src/lib/ui/indicator.ts:39
 msgid "Clear Clipboard History?"
@@ -1817,51 +1859,51 @@ msgstr "Без заголовка"
 msgid "No Description"
 msgstr "Без описания"
 
-#: src/lib/ui/items/statusItem.ts:75 src/lib/ui/items/statusItem.ts:109
+#: src/lib/ui/items/statusItem.ts:76 src/lib/ui/items/statusItem.ts:111
 msgid "Clipboard is Empty"
 msgstr "Буфер обмена пуст"
 
-#: src/lib/ui/items/statusItem.ts:112
+#: src/lib/ui/items/statusItem.ts:114
 msgid "No Items Found"
 msgstr "Элементы не найдены"
 
-#: src/lib/ui/searchEntry.ts:151
+#: src/lib/ui/searchEntry.ts:182
 msgid "__All"
 msgstr "__Все"
 
-#: src/lib/ui/searchEntry.ts:155
+#: src/lib/ui/searchEntry.ts:186
 msgid "__Text"
 msgstr "__Текст"
 
-#: src/lib/ui/searchEntry.ts:156
+#: src/lib/ui/searchEntry.ts:187
 msgid "__Code"
 msgstr "__Код"
 
-#: src/lib/ui/searchEntry.ts:157
+#: src/lib/ui/searchEntry.ts:188
 msgid "__Image"
 msgstr "__Изобр"
 
-#: src/lib/ui/searchEntry.ts:158
+#: src/lib/ui/searchEntry.ts:189
 msgid "__File"
 msgstr "__Файл"
 
-#: src/lib/ui/searchEntry.ts:159
+#: src/lib/ui/searchEntry.ts:190
 msgid "File__s"
 msgstr "Фай__лы"
 
-#: src/lib/ui/searchEntry.ts:160
+#: src/lib/ui/searchEntry.ts:191
 msgid "__Link"
 msgstr "__Ссылка"
 
-#: src/lib/ui/searchEntry.ts:161
+#: src/lib/ui/searchEntry.ts:192
 msgid "C__haracter"
 msgstr "С__имвол"
 
-#: src/lib/ui/searchEntry.ts:162
+#: src/lib/ui/searchEntry.ts:193
 msgid "Colo__r"
 msgstr "Цв__ет"
 
-#: src/lib/ui/searchEntry.ts:274
+#: src/lib/ui/searchEntry.ts:305
 msgid "Type to search"
 msgstr "Введите текст для поиска"
 
