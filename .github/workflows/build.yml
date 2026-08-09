@@ -7,7 +7,7 @@ on:
   pull_request:
 
 env:
-  UUID: copyous@boerdereinar.dev
+  UUID: copyous-ng@geovanedd.com
 
 jobs:
   lint:

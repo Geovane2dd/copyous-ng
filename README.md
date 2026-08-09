@@ -1,7 +1,6 @@
-# <img src="resources/images/icon.svg" height="32px" alt="Icon"/> Copyous - Clipboard Manager
-[![GitHub License](https://img.shields.io/github/license/boerdereinar/copyous)](./LICENSE)
-[![GitHub Release](https://img.shields.io/github/v/release/boerdereinar/copyous)](https://github.com/boerdereinar/copyous/releases/latest)
-[![Extension Downloads](https://img.shields.io/gnome-extensions/dt/copyous%40boerdereinar.dev?logo=gnome&logoColor=white&cacheSeconds=86400)](https://extensions.gnome.org/extension/8834/copyous/)
+# <img src="resources/images/icon.svg" height="32px" alt="Icon"/> Copyous NG - Clipboard Manager
+[![GitHub License](https://img.shields.io/github/license/Geovane2dd/copyous-ng)](./LICENSE)
+[![GitHub Release](https://img.shields.io/github/v/release/Geovane2dd/copyous-ng)](https://github.com/Geovane2dd/copyous-ng/releases/latest)
 
 ![Screenshot](resources/images/screenshot.png)
 
@@ -29,19 +28,16 @@ For the extension to work optimally you need to install the following dependenci
 | openSUSE      | `sudo zypper install libgda-6_0-sqlite typelib-1_0-Gda-6_0 typelib-1_0-GSound-1_0` |
 </details>
 
-### From Gnome Extensions (Recommended)
-[<img width="200" src="https://github.com/andyholmes/gnome-shell-extensions-badge/raw/master/get-it-on-ego.png">](https://extensions.gnome.org/extension/8834/copyous/)
-
 ### From Latest GitHub Release
-1. Download the latest release from [Releases](https://github.com/boerdereinar/copyous/releases).
+1. Download the latest release from [Releases](https://github.com/Geovane2dd/copyous-ng/releases).
 2. Install extension:
    ```shell
-   gnome-extensions install -f ~/Downloads/copyous@boerdereinar.dev.zip
+   gnome-extensions install -f ~/Downloads/copyous-ng@geovanedd.com.zip
    ```
 3. Restart the session by logging out.
 4. Enable the extension in [Extension Manager](https://flathub.org/en/apps/com.mattjakeman.ExtensionManager) or by running the following command:
    ```shell
-   gnome-extensions enable copyous@boerdereinar.dev
+   gnome-extensions enable copyous-ng@geovanedd.com
    ```
 
 ### From Source
@@ -52,8 +48,8 @@ For the extension to work optimally you need to install the following dependenci
     - [jq](https://jqlang.org/)
 2. Clone the repository:
    ```shell
-   git clone --recurse-submodules https://github.com/boerdereinar/copyous
-   cd copyous
+   git clone --recurse-submodules https://github.com/Geovane2dd/copyous-ng
+   cd copyous-ng
    ```
 3. Build and install the extension:
    ```shell
@@ -62,13 +58,13 @@ For the extension to work optimally you need to install the following dependenci
 4. Restart the session by logging out.
 5. Enable the extension in [Extension Manager](https://flathub.org/en/apps/com.mattjakeman.ExtensionManager) or by running the following command:
    ```shell
-   gnome-extensions enable copyous@boerdereinar.dev
+   gnome-extensions enable copyous-ng@geovanedd.com
    ```
 
 ## Configuration
 You can open the extension settings either through the panel indicator, [Extension Manager](https://flathub.org/en/apps/com.mattjakeman.ExtensionManager) or by running the following command:
 ```shell
-gnome-extensions prefs copyous@boerdereinar.dev
+gnome-extensions prefs copyous-ng@geovanedd.com
 ```
 
 ## Shortcuts
@@ -117,7 +113,7 @@ gdbus call --session \
 See [CONTRIBUTING.md](./CONTRIBUTING.md) for more information.
 
 ## Acknowledgments
-Copyous is a full rewrite of [Pano](https://github.com/oae/gnome-shell-pano).
+Copyous NG is a fork of [Copyous](https://github.com/boerdereinar/copyous) by boerdereinar, which is itself a full rewrite of [Pano](https://github.com/oae/gnome-shell-pano).
 
 ## License
 This project is licensed under the **GNU General Public License 3 or Later**.

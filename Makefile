@@ -1,6 +1,6 @@
 # Constants
 NAME := copyous
-UUID := copyous@boerdereinar.dev
+UUID := copyous-ng@geovanedd.com
 
 # Directories
 SRC_DIR := src

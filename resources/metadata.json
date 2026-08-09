@@ -1,9 +1,9 @@
 {
-	"name": "Copyous",
+	"name": "Copyous NG",
 	"description": "Modern Clipboard Manager for GNOME",
-	"uuid": "copyous@boerdereinar.dev",
+	"uuid": "copyous-ng@geovanedd.com",
 	"shell-version": ["46", "47", "48", "49", "50"],
 	"settings-schema": "org.gnome.shell.extensions.copyous",
-	"gettext-domain": "copyous@boerdereinar.dev",
-	"url": "https://github.com/boerdereinar/copyous"
+	"gettext-domain": "copyous-ng@geovanedd.com",
+	"url": "https://github.com/Geovane2dd/copyous-ng"
 }
