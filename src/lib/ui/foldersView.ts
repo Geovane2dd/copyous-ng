@@ -9,6 +9,7 @@ import * as ModalDialog from 'resource:///org/gnome/shell/ui/modalDialog.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
 import type CopyousExtension from '../../extension.js';
+import { boxLayoutProps } from '../common/boxLayout.js';
 import { registerClass } from '../common/gjs.js';
 import { Icon } from '../common/icons.js';
 
@@ -127,17 +128,19 @@ export class FoldersView extends St.BoxLayout {
 	private readonly _emptyLabel: St.Label;
 
 	constructor(private ext: CopyousExtension) {
-		super({
-			style_class: 'folders-view',
-			orientation: Clutter.Orientation.VERTICAL,
-			x_expand: true,
-			y_expand: true,
-		});
+		super(
+			boxLayoutProps({
+				style_class: 'folders-view',
+				orientation: Clutter.Orientation.VERTICAL,
+				x_expand: true,
+				y_expand: true,
+			}),
+		);
 
 		const scrollView = new St.ScrollView({ style_class: 'folders-scrollview', x_expand: true, y_expand: true });
 		this.add_child(scrollView);
 
-		this._list = new St.BoxLayout({ orientation: Clutter.Orientation.VERTICAL, x_expand: true });
+		this._list = new St.BoxLayout(boxLayoutProps({ orientation: Clutter.Orientation.VERTICAL, x_expand: true }));
 		scrollView.child = this._list;
 
 		this._emptyLabel = new St.Label({
